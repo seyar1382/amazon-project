@@ -1,11 +1,14 @@
 import { cart, addToCart } from "./cart.js";
-import { products } from "../data/products.js";
+import { products, loadProducts } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
-let productsHTML = "";
+loadProducts(renderProductsGrid);
 
-products.forEach((product) => {
-  productsHTML += `
+function renderProductsGrid() {
+  let productsHTML = "";
+
+  products.forEach((product) => {
+    productsHTML += `
     <div class="product-container">
       <div class="product-image-container">
         <img class="product-image" src="${product.image}" alt="${product.name}">
@@ -51,27 +54,28 @@ products.forEach((product) => {
           <button class="add-to-cart-button button-primary js-add-to-cart" data-product-Id="${product.id}">Add to Cart</button>
         </div>
   `;
-});
-
-document.querySelector(".js-products-grid").innerHTML = productsHTML;
-
-function updateCartQuantity() {
-  let cartQuantity = 0;
-  cart.forEach((item) => {
-    cartQuantity += item.quantity;
   });
 
-  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+  document.querySelector(".js-products-grid").innerHTML = productsHTML;
+
+  function updateCartQuantity() {
+    let cartQuantity = 0;
+    cart.forEach((item) => {
+      cartQuantity += item.quantity;
+    });
+
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+  }
+
+  document.querySelectorAll(".js-add-to-cart").forEach((button, index) => {
+    button.addEventListener("click", () => {
+      const { productId } = button.dataset;
+      addToCart(productId);
+      updateCartQuantity();
+
+      document
+        .querySelector(`.js-added-to-cart-${productId}`)
+        .classList.add("added-to-cart-visible");
+    });
+  });
 }
-
-document.querySelectorAll(".js-add-to-cart").forEach((button, index) => {
-  button.addEventListener("click", () => {
-    const { productId } = button.dataset;
-    addToCart(productId);
-    updateCartQuantity();
-
-    document
-      .querySelector(`.js-added-to-cart-${productId}`)
-      .classList.add("added-to-cart-visible");
-  });
-});
