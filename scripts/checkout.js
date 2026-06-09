@@ -10,10 +10,17 @@ import { loadProducts, loadProductsFetch } from "../data/products.js";
 //   });
 // })
 
-loadProductsFetch().then(() => {
+async function loadPage() {
+  await loadProductsFetch();
+
   renderOrderSummary();
   renderPaymentSummary();
-});
+}
+loadPage();
+
+// loadProductsFetch().then(() => {
+
+// });
 
 // loadProducts(() => {
 
