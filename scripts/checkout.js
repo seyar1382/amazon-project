@@ -11,7 +11,12 @@ import { loadProducts, loadProductsFetch } from "../data/products.js";
 // })
 
 async function loadPage() {
-  await loadProductsFetch();
+  // throw "error1";
+  try {
+    await loadProductsFetch();
+  } catch (error) {
+    console.log("error");
+  }
 
   renderOrderSummary();
   renderPaymentSummary();
